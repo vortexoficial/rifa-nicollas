@@ -1,8 +1,6 @@
-// --- IMPORTAÇÕES (Versão para Navegador) ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { getFirestore, collection, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-// --- SUAS CONFIGURAÇÕES (Já inseridas do histórico) ---
 const firebaseConfig = {
   apiKey: "AIzaSyACBB_r8sPsXaIy7L9k2CkMd2rwk3wUrYc",
   authDomain: "rifa-7c72f.firebaseapp.com",
@@ -12,17 +10,31 @@ const firebaseConfig = {
   appId: "1:1004880007031:web:19746f53c62691d9eb9b72"
 };
 
-// --- INICIALIZAÇÃO DO FIREBASE ---
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// --- LÓGICA DA RIFA ---
-// ATUALIZADO PARA 150 NÚMEROS
 const totalNumeros = 150; 
 const grid = document.getElementById('grid-rifa');
 let numeroAtual = null;
 
-// 1. Gera os números na tela
+// --- FUNÇÕES VISUAIS ---
+window.fecharModais = () => {
+    document.getElementById('modal').style.display = 'none';
+    document.getElementById('modal-sucesso').style.display = 'none';
+}
+
+function abrirModalSucesso(numero) {
+    document.getElementById('modal').style.display = 'none'; // fecha o de compra
+    document.getElementById('sucesso-numero').innerText = numero;
+    document.getElementById('modal-sucesso').style.display = 'block'; // abre o de sucesso
+}
+
+// Fecha clicando fora
+window.onclick = (event) => {
+    if (event.target.classList.contains('modal')) window.fecharModais();
+}
+
+// --- LÓGICA DO GRID ---
 function criarGrid() {
     if(!grid) return; 
     grid.innerHTML = ''; 
@@ -30,96 +42,77 @@ function criarGrid() {
         const div = document.createElement('div');
         div.classList.add('numero');
         div.id = `num-${i}`;
-        div.textContent = i;
-        // Adiciona zero à esquerda para números menores que 100 (opcional, fica mais bonito)
-        if (i < 10) div.textContent = '0' + i;
-        if (i < 100 && totalNumeros >= 100) div.textContent = (i < 10 ? '00' : '0') + i;
+        
+        // Formata número (01, 02... 150)
+        let numFormatado = i.toString();
+        if (i < 10) numFormatado = '0' + i;
+        if (i < 100) numFormatado = '0' + numFormatado; // Ajuste simples para 3 digitos se necessario, mas 01-99 e 100+ funciona bem.
+        if (i < 100) numFormatado = i.toString().padStart(2, '0'); // garante 01, 09, 10
+        if (totalNumeros >= 100) numFormatado = i.toString().padStart(3, '0'); // garante 001, 050, 150
 
+        div.textContent = numFormatado;
         div.onclick = () => abrirModal(i);
         grid.appendChild(div);
     }
 }
 
-// 2. Escuta o banco de dados em Tempo Real
 onSnapshot(collection(db, "rifa"), (snapshot) => {
     snapshot.forEach((doc) => {
         const dados = doc.data();
-        const numero = doc.id;
-        const status = dados.status; 
-        
-        const el = document.getElementById(`num-${numero}`);
+        const el = document.getElementById(`num-${doc.id}`);
         if (el) {
             el.classList.remove('livre', 'reservado', 'pago');
-            el.classList.add(status);
+            el.classList.add(dados.status);
         }
     });
 });
 
-// Funções do Modal (Janela de compra)
-const modal = document.getElementById("modal");
 window.abrirModal = (n) => {
     const el = document.getElementById(`num-${n}`);
     if (el.classList.contains('reservado') || el.classList.contains('pago')) {
-        alert("Este número já não está disponível!");
+        // Você pode criar um modal de "Indisponível" aqui se quiser, mas alert é ok para erro
+        alert("Este número já foi escolhido por outra pessoa!"); 
         return;
     }
-
     numeroAtual = n;
-    const spanNumero = document.getElementById('num-selecionado');
-    // Formata o número no modal também
-    let numeroFormatado = n;
-    if (n < 10) numeroFormatado = '0' + n;
-    if (n < 100 && totalNumeros >= 100) numeroFormatado = (n < 10 ? '00' : '0') + n;
-
-    if(spanNumero) spanNumero.innerText = numeroFormatado;
-    
-    // Limpa os campos
-    document.getElementById('nome').value = '';
-    document.getElementById('telefone').value = '';
-    
-    if(modal) modal.style.display = "block";
+    document.getElementById('num-selecionado').innerText = n.toString().padStart(3, '0');
+    document.getElementById('modal').style.display = "block";
 }
 
-// Fechar modal
-const spanClose = document.querySelector('.close');
-if(spanClose) spanClose.onclick = () => modal.style.display = "none";
-window.onclick = (event) => { if (event.target == modal) modal.style.display = "none"; }
-
-// 3. Botão Confirmar Reserva
 window.confirmarReserva = async () => {
     const nome = document.getElementById('nome').value;
     const telefone = document.getElementById('telefone').value;
-    const botaoConfirmar = document.querySelector('#modal button');
+    const botao = document.querySelector('#modal button');
 
     if (!nome || !telefone) {
-        alert("Por favor, preencha seu nome e WhatsApp para que possamos entrar em contato!");
+        alert("Preencha seu nome e WhatsApp!");
         return;
     }
 
-    // Desabilita botão para evitar duplo clique
-    botaoConfirmar.disabled = true;
-    botaoConfirmar.innerText = "Reservando...";
+    botao.disabled = true;
+    botao.innerText = "Reservando...";
 
     try {
         await setDoc(doc(db, "rifa", String(numeroAtual)), {
             nome: nome,
             telefone: telefone,
             status: "reservado",
-            valor: 10.00,
-            data: new Date()
+            data: new Date().toISOString()
         });
-
-        alert(`Sucesso! O número ${numeroAtual} foi reservado. Por favor, faça o PIX de R$ 10,00 e envie o comprovante.`);
-        if(modal) modal.style.display = "none";
         
+        abrirModalSucesso(numeroAtual);
+        
+        // Limpa formulário
+        document.getElementById('nome').value = '';
+        document.getElementById('telefone').value = '';
+
     } catch (e) {
-        console.error("Erro ao gravar: ", e);
-        alert("Erro ao reservar. Verifique sua conexão e tente novamente.");
+        console.error(e);
+        alert("Erro ao reservar. Tente novamente.");
     } finally {
-        botaoConfirmar.disabled = false;
-        botaoConfirmar.innerText = "Confirmar Reserva";
+        botao.disabled = false;
+        botao.innerText = "Confirmar Reserva";
     }
 }
 
-// Inicia o grid
 criarGrid();

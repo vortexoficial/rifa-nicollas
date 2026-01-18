@@ -8,11 +8,11 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container main-content">
         <h1>💙 Rifa para o Tratamento do Nicollas</h1>
         
         <div class="foto-container">
-            <img src="image.png"  alt="Foto do Nicollas" class="foto-nicollas">
+            <img src="foto-nicollas.jpg" onerror="this.src='https://placehold.co/600x400/e0e0e0/808080?text=Foto+do+Nicollas'" alt="Foto do Nicollas" class="foto-nicollas">
         </div>
 
         <p class="descricao-principal">
@@ -30,24 +30,38 @@
 
         <div id="grid-rifa" class="grid-rifa">
             </div>
+        
+        <footer style="margin-top: 30px; font-size: 0.8em; color: #888;">
+            <a href="admin.html" style="color: #ddd; text-decoration: none;">Admin</a>
+        </footer>
     </div>
 
     <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Reservar número <span id="num-selecionado" style="color: #007bff;"></span></h2>
+            <span class="close" onclick="fecharModais()">&times;</span>
+            <h2>Reservar nº <span id="num-selecionado" style="color: #007bff;"></span></h2>
             
             <p class="valor-destaque">Valor: R$ 10,00</p>
-            <p>Para garantir, faça o PIX e envie o comprovante.</p>
+            <p style="font-size: 0.9em; color: #555;">Para garantir, faça o PIX e envie o comprovante.</p>
             
             <div class="pix-area">
-                <strong>Chave PIX:</strong><br>
-                000.000.000-00 (Seu CPF/Email)
+                <small>Chave PIX (Celular):</small><br>
+                <strong style="font-size: 1.2em; user-select: all;">22992846915</strong>
             </div>
             
-            <input type="text" id="nome" placeholder="Seu Nome Completo (Obrigatório)">
-            <input type="tel" id="telefone" placeholder="Seu WhatsApp (Obrigatório)">
+            <input type="text" id="nome" placeholder="Seu Nome Completo">
+            <input type="tel" id="telefone" placeholder="Seu WhatsApp (com DDD)">
             <button onclick="confirmarReserva()">Confirmar Reserva</button>
+        </div>
+    </div>
+
+    <div id="modal-sucesso" class="modal">
+        <div class="modal-content sucesso-content">
+            <div class="icone-sucesso">✅</div>
+            <h2>Reserva Feita!</h2>
+            <p>O número <strong><span id="sucesso-numero"></span></strong> foi reservado para você.</p>
+            <p>Agora envie o comprovante do PIX para validar sua participação.</p>
+            <button onclick="fecharModais()" style="background-color: #2ecc71;">Entendido!</button>
         </div>
     </div>
 

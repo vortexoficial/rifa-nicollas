@@ -26,43 +26,20 @@ h1 { color: var(--cor-azul-titulo); margin-bottom: 10px; }
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-/* ESTILOS DA FOTO */
-.foto-container {
-    margin: 20px auto;
-    max-width: 100%;
-}
-
+.foto-container { margin: 20px auto; max-width: 100%; }
 .foto-nicollas {
-    width: 100%;
-    max-width: 500px; /* Tamanho máximo da foto */
-    height: auto;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    width: 100%; max-width: 500px; height: auto;
+    border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     border: 3px solid white;
 }
 
-/* Textos */
 .descricao-principal { font-size: 1.2em; margin-bottom: 5px; }
-.regra-sorteio { font-size: 0.95em; color: #666; margin-top: 0; margin-bottom: 25px; font-style: italic; }
-.valor-destaque { font-size: 1.4em; font-weight: bold; color: var(--cor-azul-titulo); margin: 15px 0; }
+.regra-sorteio { font-size: 0.95em; color: #666; margin-bottom: 25px; font-style: italic; }
+.valor-destaque { font-size: 1.4em; font-weight: bold; color: var(--cor-azul-titulo); margin: 10px 0; }
 
 /* Legenda e Grid */
-.legenda {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.tag {
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 0.85em;
-    color: white;
-    font-weight: 500;
-}
-
+.legenda { margin-bottom: 20px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.tag { padding: 5px 15px; border-radius: 20px; font-size: 0.85em; color: white; font-weight: 500; }
 .livre { background-color: var(--cor-livre); }
 .reservado { background-color: var(--cor-reservado); color: #4a4a4a; }
 .pago { background-color: var(--cor-pago); }
@@ -70,40 +47,44 @@ h1 { color: var(--cor-azul-titulo); margin-bottom: 10px; }
 .grid-rifa {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-    gap: 8px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 15px;
+    gap: 8px; padding: 10px;
+    background: #f8f9fa; border-radius: 15px;
 }
 
 .numero {
-    background-color: var(--cor-livre);
-    color: white;
-    padding: 12px 0;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: var(--cor-livre); color: white;
+    padding: 12px 0; border-radius: 10px;
+    font-weight: bold; font-size: 1.1em; cursor: pointer;
+    transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-
 .numero:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 .numero.reservado { background-color: var(--cor-reservado); color: #4a4a4a; }
 .numero.pago { background-color: var(--cor-pago); cursor: default; opacity: 0.8; }
 .numero.pago:hover, .numero.reservado:hover { transform: none; }
 
-/* Modal */
+/* MODAIS E DESFOQUE */
 .modal {
     display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; 
-    background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
+    background-color: rgba(0,0,0,0.6); 
+    backdrop-filter: blur(8px); /* O efeito de desfoque no fundo */
+    -webkit-backdrop-filter: blur(8px);
 }
+
 .modal-content {
     background-color: #fefefe; margin: 10% auto; padding: 25px; border-radius: 15px;
-    width: 90%; max-width: 400px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 90%; max-width: 400px; position: relative; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    animation: subir 0.3s ease-out;
 }
+
+@keyframes subir { from {transform: translateY(20px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+
 .close { position: absolute; right: 20px; top: 15px; font-size: 28px; font-weight: bold; color: #aaa; cursor: pointer; }
-.pix-area { background: #f0f2f5; padding: 15px; border-radius: 10px; margin: 15px 0; font-family: monospace; border: 2px dashed #ccc;}
-input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+.pix-area { background: #eef2f7; padding: 15px; border-radius: 10px; margin: 15px 0; border: 2px dashed #b8c2cc; color: #333;}
+input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
 button { background-color: var(--cor-azul-titulo); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; margin-top: 10px; transition: background 0.2s;}
 button:hover { background-color: #004494; }
+
+/* Estilo específico do Modal de Sucesso */
+.icone-sucesso { font-size: 50px; margin-bottom: 10px; }
+.sucesso-content { text-align: center; border-top: 5px solid #2ecc71; }

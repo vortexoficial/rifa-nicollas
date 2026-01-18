@@ -12,14 +12,11 @@
         <h1>💙 Rifa para o Tratamento do Nicollas</h1>
         
         <div class="foto-container">
-            <img src="foto-nicollas.jpg" onerror="this.src='https://placehold.co/600x400/e0e0e0/808080?text=Foto+do+Nicollas'" alt="Foto do Nicollas" class="foto-nicollas">
+            <img src="image.png"  alt="Foto do Nicollas" class="foto-nicollas">
         </div>
 
-        <p class="descricao-principal">
+        <p style="font-size: 1.2em; margin: 15px 0;">
             Ajudem o Nicollas! Cada número custa apenas <strong>R$ 10,00</strong>.
-        </p>
-        <p class="regra-sorteio">
-            📢 O sorteio será realizado assim que todos os <strong>150 números</strong> forem vendidos!
         </p>
         
         <div class="legenda">
@@ -28,25 +25,24 @@
             <span class="tag pago">Pago</span>
         </div>
 
-        <div id="grid-rifa" class="grid-rifa">
-            </div>
+        <div id="grid-rifa" class="grid-rifa"></div>
         
-        <footer style="margin-top: 30px; font-size: 0.8em; color: #888;">
-            <a href="admin.html" style="color: #ddd; text-decoration: none;">Admin</a>
+        <footer style="margin-top: 40px; color: #ccc;">
+            <a href="admin.html" style="color: #eee; text-decoration: none; font-size: 0.8em;">Área do Admin</a>
         </footer>
     </div>
 
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="fecharModais()">&times;</span>
-            <h2>Reservar nº <span id="num-selecionado" style="color: #007bff;"></span></h2>
+            <h2>Reservar nº <span id="num-selecionado" style="color: #0056b3;"></span></h2>
             
-            <p class="valor-destaque">Valor: R$ 10,00</p>
-            <p style="font-size: 0.9em; color: #555;">Para garantir, faça o PIX e envie o comprovante.</p>
+            <p style="font-size: 1.1em; font-weight: bold; color: #444;">Valor: R$ 10,00</p>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Para garantir, faça o PIX e envie o comprovante.</p>
             
             <div class="pix-area">
                 <small>Chave PIX (Celular):</small><br>
-                <strong style="font-size: 1.2em; user-select: all;">22992846915</strong>
+                <strong style="font-size: 1.3em; user-select: all;">22992846915</strong>
             </div>
             
             <input type="text" id="nome" placeholder="Seu Nome Completo">
@@ -56,11 +52,11 @@
     </div>
 
     <div id="modal-sucesso" class="modal">
-        <div class="modal-content sucesso-content">
-            <div class="icone-sucesso">✅</div>
-            <h2>Reserva Feita!</h2>
-            <p>O número <strong><span id="sucesso-numero"></span></strong> foi reservado para você.</p>
-            <p>Agora envie o comprovante do PIX para validar sua participação.</p>
+        <div class="modal-content modal-sucesso" style="text-align: center;">
+            <span class="icone">✅</span>
+            <h2>Reserva Realizada!</h2>
+            <p>O número <span id="sucesso-numero" class="destaque-numero"></span> está reservado para você.</p>
+            <p style="color: #666;">Agora envie o comprovante no WhatsApp para validarmos.</p>
             <button onclick="fecharModais()" style="background-color: #2ecc71;">Entendido!</button>
         </div>
     </div>

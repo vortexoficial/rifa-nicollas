@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import { getFirestore, collection, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
+// SUAS CONFIGURAÇÕES (Não precisa mexer)
 const firebaseConfig = {
   apiKey: "AIzaSyACBB_r8sPsXaIy7L9k2CkMd2rwk3wUrYc",
   authDomain: "rifa-7c72f.firebaseapp.com",
@@ -26,10 +27,9 @@ window.fecharModais = () => {
 function abrirModalSucesso(numero) {
     document.getElementById('modal').style.display = 'none'; // fecha o de compra
     document.getElementById('sucesso-numero').innerText = numero;
-    document.getElementById('modal-sucesso').style.display = 'block'; // abre o de sucesso
+    document.getElementById('modal-sucesso').style.display = 'block'; // abre o bonito
 }
 
-// Fecha clicando fora
 window.onclick = (event) => {
     if (event.target.classList.contains('modal')) window.fecharModais();
 }
@@ -43,35 +43,41 @@ function criarGrid() {
         div.classList.add('numero');
         div.id = `num-${i}`;
         
-        // Formata número (01, 02... 150)
-        let numFormatado = i.toString();
-        if (i < 10) numFormatado = '0' + i;
-        if (i < 100) numFormatado = '0' + numFormatado; // Ajuste simples para 3 digitos se necessario, mas 01-99 e 100+ funciona bem.
-        if (i < 100) numFormatado = i.toString().padStart(2, '0'); // garante 01, 09, 10
-        if (totalNumeros >= 100) numFormatado = i.toString().padStart(3, '0'); // garante 001, 050, 150
-
+        // Formata número (001, 002...)
+        let numFormatado = i.toString().padStart(3, '0');
         div.textContent = numFormatado;
+        
         div.onclick = () => abrirModal(i);
         grid.appendChild(div);
     }
 }
 
+// Escuta o banco de dados
 onSnapshot(collection(db, "rifa"), (snapshot) => {
     snapshot.forEach((doc) => {
         const dados = doc.data();
         const el = document.getElementById(`num-${doc.id}`);
-        if (el) {
+        if (el && dados.status !== 'livre') { // Só muda se não for livre
             el.classList.remove('livre', 'reservado', 'pago');
             el.classList.add(dados.status);
+        } else if (el && dados.status === 'livre') {
+             // Caso o admin libere, volta a ser verde
+             el.classList.remove('reservado', 'pago');
+             el.classList.add('livre');
         }
     });
+    
+    // Varredura extra para limpar números deletados (caso você delete no admin)
+    // (Simplificado: Se o doc for deletado, ele não aparece no snapshot.forEach padrão
+    // mas para manter simples, o admin vai mudar o status para 'livre' em vez de deletar)
 });
 
 window.abrirModal = (n) => {
     const el = document.getElementById(`num-${n}`);
     if (el.classList.contains('reservado') || el.classList.contains('pago')) {
-        // Você pode criar um modal de "Indisponível" aqui se quiser, mas alert é ok para erro
-        alert("Este número já foi escolhido por outra pessoa!"); 
+        // Se quiser um aviso personalizado aqui também, me avise.
+        // Por enquanto, alert é o menos intrusivo para erro rápido.
+        alert("Este número já foi escolhido!"); 
         return;
     }
     numeroAtual = n;
@@ -100,6 +106,7 @@ window.confirmarReserva = async () => {
             data: new Date().toISOString()
         });
         
+        // AQUI ESTÁ A MUDANÇA: Chama o modal bonito em vez do alert
         abrirModalSucesso(numeroAtual);
         
         // Limpa formulário

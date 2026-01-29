@@ -32,13 +32,15 @@
 
         <div class="info-box">
             <h3>
-                <span class="material-icons-round icon-purple">redeem</span> Prêmios
+                <span class="material-icons-round icon-purple">redeem</span>
+                Prêmios
             </h3>
             <p><strong>1º Lugar:</strong> R$ 150,00</p>
             <p><strong>2º Lugar:</strong> R$ 100,00</p>
             <hr>
             <p>
-                <span class="material-icons-round icon-purple">event</span> <strong>Sorteio:</strong> 20/04/2026
+                <span class="material-icons-round icon-purple">event</span>
+                <strong>Sorteio:</strong> 20/04/2026
             </p>
             <p style="font-size: 0.9em; color: #666; margin-left: 28px;">Entrega das fraldas até: 15/04/2026</p>
         </div>
@@ -66,7 +68,8 @@
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="fecharModais()">
-                <span class="material-icons-round">close</span> </span>
+                <span class="material-icons-round">close</span>
+            </span>
             <h2 class="titulo-modal">Número <span id="num-selecionado"></span></h2>
             
             <div class="info-reserva">
@@ -79,11 +82,17 @@
             </div>
             
             <div class="pix-area">
-                <small style="display: flex; align-items: center; gap: 5px;">
+                <small style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
                     <span class="material-icons-round icon-purple" style="font-size: 1.2em;">pix</span>
                     Chave PIX (Celular):
                 </small>
-                <strong style="font-size: 1.3em; user-select: all; display: block; margin-top: 5px;">22992846915</strong>
+                
+                <div class="pix-input-box">
+                    <span id="chave-pix-texto">22992846915</span>
+                    <button onclick="copiarPix()" class="btn-copy" title="Copiar Chave">
+                        <span class="material-icons-round" id="icone-copiar">content_copy</span>
+                    </button>
+                </div>
             </div>
             
             <input type="text" id="nome" placeholder="Seu Nome Completo">
@@ -98,7 +107,7 @@
     <div id="modal-sucesso" class="modal">
         <div class="modal-content modal-sucesso" style="text-align: center;">
             <div class="pulse-icon-container">
-                 <span class="material-icons-round icon-purple pulse-animation" style="font-size: 4rem;">check_circle</span>
+                <span class="material-icons-round icon-purple pulse-animation" style="font-size: 4rem;">check_circle</span>
             </div>
             <h2>Reserva Realizada!</h2>
             <p>O número <span id="sucesso-numero" class="destaque-numero"></span> é seu!</p>
@@ -120,6 +129,24 @@
                 }
             }, 1500); 
         };
+
+        // LÓGICA DE COPIAR PIX
+        window.copiarPix = function() {
+            const chave = "22992846915";
+            const icone = document.getElementById('icone-copiar');
+            
+            navigator.clipboard.writeText(chave).then(() => {
+                icone.innerText = "check_circle"; // Muda ícone para Check
+                icone.style.color = "#2ecc71"; // Verde sucesso
+                
+                setTimeout(() => {
+                    icone.innerText = "content_copy"; // Volta ícone original
+                    icone.style.color = ""; 
+                }, 2000);
+            }).catch(err => {
+                alert("Erro ao copiar, copie manualmente: " + chave);
+            });
+        }
     </script>
 
     <script type="module" src="script.js"></script>

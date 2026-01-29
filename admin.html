@@ -25,7 +25,6 @@
         .badge-numero { font-size: 1.5em; font-weight: bold; width: 60px; text-align: center; color: var(--cor-roxo); }
         h2, h3 { color: var(--cor-roxo); }
 
-        /* Classe auxiliar para ícones nos botões do admin */
         .btn-icon { display: flex; align-items: center; gap: 5px; }
         .material-icons-round { font-size: 1.2em; vertical-align: middle; }
     </style>
@@ -132,7 +131,6 @@
                 const statusTexto = isPago ? 'CONFIRMADO' : 'AGUARDANDO';
                 const zapNumeros = item.telefone.replace(/\D/g, '');
 
-                // Ícones modernos no template literal
                 const html = `
                 <div class="col-md-6 col-lg-4">
                     <div class="card card-numero ${statusClass} p-3">
@@ -195,5 +193,4 @@
         }
     </script>
 </body>
-
 </html>

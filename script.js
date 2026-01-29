@@ -18,7 +18,7 @@ let numeroAtual = null;
 // Ícone de estrela
 const iconStar = '<span class="material-icons-round" style="font-size: 1.3em;">star_rate</span>';
 
-// DEFINIÇÃO DOS BLOCOS (Com wrapper 'star-wrapper' para ajuste no mobile)
+// DEFINIÇÃO DOS BLOCOS (Wrapper 'star-wrapper' para CSS mobile)
 const blocos = [
     { 
         inicio: 1, fim: 20, 
@@ -62,20 +62,18 @@ window.onclick = (event) => {
     if (event.target.classList.contains('modal')) window.fecharModais();
 }
 
-// --- CRIAÇÃO DOS GRIDS SEPARADOS ---
+// --- CRIAÇÃO DOS GRIDS ---
 function criarGrid() {
     const containerPrincipal = document.getElementById('rifa-container');
     if(!containerPrincipal) return; 
     containerPrincipal.innerHTML = ''; 
 
     blocos.forEach(bloco => {
-        // Cria Título
         const titulo = document.createElement('h3');
         titulo.className = 'titulo-secao';
-        titulo.innerHTML = bloco.titulo; // Renderiza o HTML com o wrapper
+        titulo.innerHTML = bloco.titulo;
         containerPrincipal.appendChild(titulo);
 
-        // Cria Grid
         const gridDiv = document.createElement('div');
         gridDiv.className = 'grid-rifa';
 

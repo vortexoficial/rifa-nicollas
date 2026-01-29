@@ -16,13 +16,9 @@ body {
 }
 
 /* --- ÍCONES GERAIS --- */
-.material-icons-round {
-    vertical-align: middle;
-    user-select: none;
-}
+.material-icons-round { vertical-align: middle; user-select: none; }
 .icon-purple { color: var(--cor-roxo-escuro); }
 .icon-light-purple { color: var(--cor-roxo-medio); }
-
 
 /* --- LOADER --- */
 #loader {
@@ -35,19 +31,13 @@ body {
 .loader-top { font-size: 1.2rem; letter-spacing: 3px; color: var(--cor-roxo-medio); margin-bottom: -5px;}
 .loader-bottom { font-size: 2.5rem; font-weight: 800; color: var(--cor-roxo-escuro); text-transform: uppercase; }
 
-.loader-icon-container {
-    margin: 15px 0;
-    animation: pulse 1.2s infinite ease-in-out;
-}
+.loader-icon-container { margin: 15px 0; animation: pulse 1.2s infinite ease-in-out; }
 .loader-icon-container .material-icons-round {
     font-size: 4rem;
-    /* ALTERAÇÃO: Cor Lilás Bebê Claro */
-    color: var(--cor-lilas-bebe); 
-    filter: drop-shadow(0 0 5px rgba(220, 208, 255, 0.8)); /* Brilho suave lilás */
+    color: var(--cor-lilas-bebe); /* Cor alterada para Lilás Bebe */
+    filter: drop-shadow(0 0 5px rgba(220, 208, 255, 0.8));
 }
-
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
-
 
 /* --- LAYOUT --- */
 .container {
@@ -68,12 +58,10 @@ body {
 
 .info-box {
     background-color: #FAFAFF; border: 2px dashed var(--cor-lilas-bebe);
-    padding: 15px; border-radius: 15px; margin-bottom: 20px;
-    text-align: left;
+    padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: left;
 }
 .info-box h3 { display: flex; align-items: center; gap: 8px; margin-top: 0; color: var(--cor-roxo-escuro); }
 .info-box p { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
-
 
 /* LEGENDA e GRID */
 .legenda { margin: 20px 0; display: flex; justify-content: center; gap: 10px; }
@@ -82,12 +70,10 @@ body {
 .reservado { background-color: var(--cor-reservado); color: #555; }
 .pago { background-color: var(--cor-roxo-escuro); color: white; }
 
-/* TÍTULOS DAS SEÇÕES */
 .titulo-secao {
     color: var(--cor-roxo-escuro); background-color: #F3F0FF;
     padding: 12px; border-radius: 12px; margin-top: 30px; margin-bottom: 15px;
     font-size: 1.1em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-    /* Configuração Flexbox Padrão (Desktop: Lado a Lado) */
     display: flex; align-items: center; justify-content: center; gap: 10px; 
 }
 
@@ -122,17 +108,32 @@ body {
     position: absolute; right: 20px; top: 15px; 
     color: var(--cor-roxo-medio); cursor: pointer; 
     background: #F3F0FF; border-radius: 50%; padding: 5px;
-    display: flex; align-items: center; justify-content: center;
-    transition: 0.2s;
+    display: flex; align-items: center; justify-content: center; transition: 0.2s;
 }
 .close:hover { background: var(--cor-lilas-bebe); color: var(--cor-roxo-escuro);}
 
 .titulo-modal { color: var(--cor-roxo-escuro); margin-top: 0;}
 .destaque-fralda { font-size: 1.1em; margin: 15px 0; padding: 15px; background: #F3F0FF; border-radius: 15px; color: #555; text-align: center;}
 
+/* CSS NOVO DO PIX */
 .pix-area { background: #f9f9f9; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed var(--cor-roxo-medio); color: #333; text-align: left;}
-input { width: 100%; padding: 15px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 16px; background: #fafafa; outline-color: var(--cor-roxo-medio);}
 
+.pix-input-box {
+    display: flex; justify-content: space-between; align-items: center;
+    background-color: #ffffff; border: 2px solid var(--cor-lilas-bebe);
+    border-radius: 12px; padding: 10px 15px; margin-top: 5px;
+}
+#chave-pix-texto { font-size: 1.3em; font-weight: bold; color: var(--cor-preto); user-select: all; }
+
+.btn-copy {
+    background: none; border: none; padding: 5px; margin: 0; width: auto;
+    cursor: pointer; color: var(--cor-roxo-medio); transition: transform 0.2s;
+    display: flex; align-items: center; justify-content: center;
+}
+.btn-copy:hover { transform: scale(1.2); background-color: transparent; color: var(--cor-roxo-escuro); }
+
+/* Inputs e Botão Confirmar */
+input { width: 100%; padding: 15px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 16px; background: #fafafa; outline-color: var(--cor-roxo-medio);}
 button { 
     background-color: var(--cor-roxo-escuro); color: white; border: none; padding: 16px; 
     border-radius: 12px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; margin-top: 15px; 
@@ -146,14 +147,8 @@ button:hover { transform: scale(1.02); background-color: #3a0066;}
 /* --- AJUSTE MOBILE PARA ESTRELAS ACIMA --- */
 @media (max-width: 500px) {
     .titulo-secao {
-        flex-direction: column; /* Coloca um em cima do outro */
-        text-align: center;
-        gap: 5px;
-        padding-top: 15px;
-        padding-bottom: 15px;
+        flex-direction: column; text-align: center; gap: 5px;
+        padding-top: 15px; padding-bottom: 15px;
     }
-    .star-wrapper {
-        margin-bottom: 2px; /* Espaço entre estrelas e texto */
-        display: block;
-    }
+    .star-wrapper { margin-bottom: 2px; display: block; }
 }

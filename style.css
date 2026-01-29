@@ -1,58 +1,62 @@
 :root {
-    /* Paleta Chá Rifa Isis Maitê */
-    --cor-lilas-bebe: #DCD0FF; /* Fundo suave / Livre */
-    --cor-roxo-escuro: #4B0082; /* Títulos / Botões / Pago */
-    --cor-roxo-medio: #9370DB; /* Detalhes */
+    --cor-lilas-bebe: #DCD0FF;
+    --cor-roxo-escuro: #4B0082;
+    --cor-roxo-medio: #9370DB;
     --cor-branco: #FFFFFF;
     --cor-preto: #1A1A1A;
-    --cor-reservado: #FFD700; /* Dourado para atenção/reservado */
-    
-    --bg-body: #F3F0FF; /* Lilás bem clarinho pro fundo da página */
+    --cor-reservado: #FFD700;
+    --bg-body: #F3F0FF;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--bg-body);
-    margin: 0;
-    padding: 0; /* Loader cobre tudo */
-    text-align: center;
-    color: var(--cor-preto);
+    margin: 0; padding: 0;
+    text-align: center; color: var(--cor-preto);
 }
+
+/* --- ÍCONES GERAIS --- */
+/* Classe padrão do Google Fonts */
+.material-icons-round {
+    vertical-align: middle; /* Alinha o ícone com o texto */
+    user-select: none;
+}
+
+/* Cores para ícones */
+.icon-purple { color: var(--cor-roxo-escuro); }
+.icon-light-purple { color: var(--cor-roxo-medio); }
+
 
 /* --- LOADER --- */
 #loader {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: var(--cor-branco);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--cor-branco); z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
     transition: opacity 0.5s ease;
 }
-
 .loader-content { display: flex; flex-direction: column; align-items: center; }
 .loader-top { font-size: 1.2rem; letter-spacing: 3px; color: var(--cor-roxo-medio); margin-bottom: -5px;}
 .loader-bottom { font-size: 2.5rem; font-weight: 800; color: var(--cor-roxo-escuro); text-transform: uppercase; }
-.heart {
-    font-size: 3rem;
-    margin: 10px 0;
-    animation: pulse 1s infinite;
+
+/* Nova estrutura do ícone do loader */
+.loader-icon-container {
+    margin: 15px 0;
+    animation: pulse 1.2s infinite ease-in-out;
+}
+.loader-icon-container .material-icons-round {
+    font-size: 4rem; /* Tamanho grande pro loader */
+    color: var(--cor-roxo-escuro);
+    /* Adiciona um brilho suave roxo */
+    filter: drop-shadow(0 0 10px rgba(75, 0, 130, 0.3));
 }
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-}
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
-/* --- LAYOUT PRINCIPAL --- */
+
+/* --- LAYOUT --- */
 .container {
-    max-width: 600px;
-    margin: 20px auto;
-    background: var(--cor-branco);
-    padding: 30px 20px;
-    border-radius: 25px;
+    max-width: 600px; margin: 20px auto; background: var(--cor-branco);
+    padding: 30px 20px; border-radius: 25px;
     box-shadow: 0 10px 30px rgba(75, 0, 130, 0.1);
 }
 
@@ -62,84 +66,81 @@ body {
 .foto-container { margin: 20px auto; }
 .foto-destaque {
     width: 100%; max-width: 300px; height: auto;
-    border-radius: 50%; /* Foto redonda fica charmoso para chá de bebê */
-    border: 5px solid var(--cor-lilas-bebe);
-    padding: 5px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 50%; border: 5px solid var(--cor-lilas-bebe);
+    padding: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .info-box {
-    background-color: #FAFAFF;
-    border: 2px dashed var(--cor-lilas-bebe);
-    padding: 15px;
-    border-radius: 15px;
-    margin-bottom: 20px;
+    background-color: #FAFAFF; border: 2px dashed var(--cor-lilas-bebe);
+    padding: 15px; border-radius: 15px; margin-bottom: 20px;
+    text-align: left; /* Alinha texto com ícones à esquerda */
 }
-.valor-destaque { font-size: 1.1em; color: var(--cor-roxo-escuro); font-weight: bold; }
-.valor-destaque span { font-size: 0.9em; color: var(--cor-preto); font-weight: normal;}
+.info-box h3 { display: flex; align-items: center; gap: 8px; margin-top: 0; color: var(--cor-roxo-escuro); }
+.info-box p { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
 
-/* Legenda e Grid */
+
+/* LEGENDA e GRID */
 .legenda { margin: 20px 0; display: flex; justify-content: center; gap: 10px; }
 .tag { padding: 5px 15px; border-radius: 20px; font-size: 0.8em; font-weight: 600; }
 .livre { background-color: var(--cor-lilas-bebe); color: var(--cor-roxo-escuro); }
 .reservado { background-color: var(--cor-reservado); color: #555; }
 .pago { background-color: var(--cor-roxo-escuro); color: white; }
 
-.grid-rifa {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
-    gap: 10px; padding: 10px;
+.titulo-secao {
+    color: var(--cor-roxo-escuro); background-color: #F3F0FF;
+    padding: 12px; border-radius: 12px; margin-top: 30px; margin-bottom: 15px;
+    font-size: 1.1em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    display: flex; align-items: center; justify-content: center; gap: 8px; /* Para alinhar o ícone no título */
 }
 
+.grid-rifa {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+    gap: 10px; padding: 5px; margin-bottom: 10px;
+}
 .numero {
-    background-color: var(--cor-lilas-bebe); 
-    color: var(--cor-roxo-escuro);
-    padding: 15px 0; 
-    border-radius: 12px;
-    font-weight: bold; 
-    font-size: 1.1em; 
-    cursor: pointer;
-    transition: all 0.2s; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    background-color: var(--cor-lilas-bebe); color: var(--cor-roxo-escuro);
+    padding: 15px 0; border-radius: 12px; font-weight: bold; font-size: 1.1em; 
+    cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 .numero:hover { transform: translateY(-3px); background-color: #ccc0fa; }
-
 .numero.reservado { background-color: var(--cor-reservado); color: #444; }
 .numero.pago { background-color: var(--cor-roxo-escuro); color: white; opacity: 0.9; cursor: default;}
 
 /* --- MODAIS --- */
 .modal {
     display: none; position: fixed; z-index: 1000; left: 0; top: 0; 
-    width: 100%; height: 100%; 
-    background-color: rgba(75, 0, 130, 0.5); /* Fundo roxo translúcido */
-    backdrop-filter: blur(4px);
-    align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
+    width: 100%; height: 100%; background-color: rgba(75, 0, 130, 0.5); 
+    backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
 }
-
 .modal-content {
     background-color: #fff; padding: 30px; border-radius: 25px;
     width: 100%; max-width: 380px; position: relative; 
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    border: 4px solid var(--cor-lilas-bebe);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3); border: 4px solid var(--cor-lilas-bebe);
     animation: subir 0.3s ease-out;
 }
 @keyframes subir { from {transform: translateY(30px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
 
-.close { position: absolute; right: 20px; top: 15px; font-size: 30px; color: var(--cor-roxo-medio); cursor: pointer; }
+.close { 
+    position: absolute; right: 20px; top: 15px; 
+    color: var(--cor-roxo-medio); cursor: pointer; 
+    background: #F3F0FF; border-radius: 50%; padding: 5px;
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.2s;
+}
+.close:hover { background: var(--cor-lilas-bebe); color: var(--cor-roxo-escuro);}
+
 .titulo-modal { color: var(--cor-roxo-escuro); margin-top: 0;}
+.destaque-fralda { font-size: 1.1em; margin: 15px 0; padding: 15px; background: #F3F0FF; border-radius: 15px; color: #555; text-align: center;}
 
-.destaque-fralda { font-size: 1.1em; margin: 15px 0; padding: 10px; background: #F3F0FF; border-radius: 10px; color: var(--cor-roxo-escuro); }
-
-.pix-area { background: #f9f9f9; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed var(--cor-roxo-medio); color: #333; }
+.pix-area { background: #f9f9f9; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed var(--cor-roxo-medio); color: #333; text-align: left;}
 input { width: 100%; padding: 15px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 16px; background: #fafafa; outline-color: var(--cor-roxo-medio);}
 
 button { 
-    background-color: var(--cor-roxo-escuro); 
-    color: white; border: none; padding: 16px; 
-    border-radius: 12px; cursor: pointer; width: 100%; 
-    font-size: 16px; font-weight: bold; margin-top: 15px; 
+    background-color: var(--cor-roxo-escuro); color: white; border: none; padding: 16px; 
+    border-radius: 12px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; margin-top: 15px; 
     transition: transform 0.2s;
 }
 button:hover { transform: scale(1.02); background-color: #3a0066;}
 
-.pulse-icon { font-size: 50px; animation: pulse 1.5s infinite; }
+.pulse-icon-container { margin-bottom: 15px; }
+.pulse-animation { animation: pulse 1.5s infinite; }

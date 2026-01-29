@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import { getFirestore, collection, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-// SUAS CONFIGURAÇÕES (Mantive as mesmas do arquivo original)
 const firebaseConfig = {
   apiKey: "AIzaSyACBB_r8sPsXaIy7L9k2CkMd2rwk3wUrYc",
   authDomain: "rifa-7c72f.firebaseapp.com",
@@ -14,23 +13,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ATUALIZADO PARA 120 NÚMEROS
-const totalNumeros = 120; 
-const grid = document.getElementById('grid-rifa');
 let numeroAtual = null;
 
-// --- LOADER ---
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        const loader = document.getElementById('loader');
-        if(loader) {
-            loader.style.opacity = '0';
-            setTimeout(() => { loader.style.display = 'none'; }, 500);
-        }
-    }, 2000); // Tempo do loader aparecendo (2 segundos)
-});
+// Ícones modernos para os títulos (usando estrelas para representar os tamanhos)
+const iconStar = '<span class="material-icons-round" style="font-size: 1.3em;">star_rate</span>';
 
-// --- MÁSCARA DE TELEFONE ---
+// DEFINIÇÃO DOS BLOCOS COM ÍCONES MODERNOS NA STRING HTML
+const blocos = [
+    { inicio: 1, fim: 20, titulo: `${iconStar} Fralda P + Mimo (01 ao 20)` },
+    { inicio: 21, fim: 90, titulo: `${iconStar}${iconStar} Fralda M + Mimo (21 ao 90)` },
+    { inicio: 91, fim: 120, titulo: `${iconStar}${iconStar}${iconStar} Fralda G + Mimo (91 ao 120)` }
+];
+
+// --- MÁSCARA WHATSAPP ---
 const inputTelefone = document.getElementById('telefone');
 if(inputTelefone) {
     inputTelefone.addEventListener('input', function (e) {
@@ -42,12 +37,10 @@ if(inputTelefone) {
     });
 }
 
-// --- VISUAL E MODAIS ---
+// --- MODAIS ---
 window.fecharModais = () => {
-    const modal = document.getElementById('modal');
-    const modalSucesso = document.getElementById('modal-sucesso');
-    if(modal) modal.style.display = 'none';
-    if(modalSucesso) modalSucesso.style.display = 'none';
+    document.getElementById('modal').style.display = 'none';
+    document.getElementById('modal-sucesso').style.display = 'none';
 }
 
 function abrirModalSucesso(numero) {
@@ -60,32 +53,49 @@ window.onclick = (event) => {
     if (event.target.classList.contains('modal')) window.fecharModais();
 }
 
-// --- CRIAÇÃO DO GRID ---
+// --- CRIAÇÃO DOS GRIDS SEPARADOS ---
 function criarGrid() {
-    if(!grid) return; 
-    grid.innerHTML = ''; 
-    for (let i = 1; i <= totalNumeros; i++) {
-        const div = document.createElement('div');
-        div.classList.add('numero');
-        div.id = `num-${i}`;
-        div.textContent = i.toString().padStart(3, '0');
-        div.onclick = () => abrirModal(i);
-        grid.appendChild(div);
-    }
+    const containerPrincipal = document.getElementById('rifa-container');
+    if(!containerPrincipal) return; 
+    containerPrincipal.innerHTML = ''; 
+
+    blocos.forEach(bloco => {
+        // 1. Cria o Título da Seção (usando innerHTML para renderizar os ícones)
+        const titulo = document.createElement('h3');
+        titulo.className = 'titulo-secao';
+        titulo.innerHTML = bloco.titulo; // innerHTML permite as tags dos ícones
+        containerPrincipal.appendChild(titulo);
+
+        // 2. Cria o Grid desta seção
+        const gridDiv = document.createElement('div');
+        gridDiv.className = 'grid-rifa';
+
+        for (let i = bloco.inicio; i <= bloco.fim; i++) {
+            const div = document.createElement('div');
+            div.classList.add('numero');
+            div.id = `num-${i}`;
+            div.textContent = i.toString().padStart(3, '0');
+            div.onclick = () => abrirModal(i);
+            gridDiv.appendChild(div);
+        }
+        
+        containerPrincipal.appendChild(gridDiv);
+    });
 }
 
-// Escuta Firebase em tempo real
+// Escuta Firebase
 onSnapshot(collection(db, "rifa"), (snapshot) => {
     snapshot.forEach((doc) => {
         const dados = doc.data();
         const el = document.getElementById(`num-${doc.id}`);
-        // Verifica se o ID do documento está dentro do range 1 a 120
-        if (el && dados.status !== 'livre') { 
-            el.classList.remove('livre', 'reservado', 'pago');
-            el.classList.add(dados.status);
-        } else if (el && dados.status === 'livre') {
-             el.classList.remove('reservado', 'pago');
-             el.classList.add('livre');
+        if (el) { 
+            if (dados.status !== 'livre') {
+                el.classList.remove('livre', 'reservado', 'pago');
+                el.classList.add(dados.status);
+            } else {
+                el.classList.remove('reservado', 'pago');
+                el.classList.add('livre');
+            }
         }
     });
 });
@@ -93,28 +103,21 @@ onSnapshot(collection(db, "rifa"), (snapshot) => {
 window.abrirModal = (n) => {
     const el = document.getElementById(`num-${n}`);
     if (el.classList.contains('reservado') || el.classList.contains('pago')) {
-        alert("Poxa, este número já foi escolhido! Tente outro."); 
+        alert("Número já escolhido! Por favor, escolha outro."); 
         return;
     }
     numeroAtual = n;
     
-    // --- LÓGICA DAS FRALDAS ---
     let textoFralda = "";
-    if (n >= 1 && n <= 20) {
-        textoFralda = "Fralda P + Mimo";
-    } else if (n >= 21 && n <= 90) { // Ajustado para fechar a conta com o G começando em 91
-        textoFralda = "Fralda M + Mimo";
-    } else if (n >= 91 && n <= 120) {
-        textoFralda = "Fralda G + Mimo";
-    }
+    if (n <= 20) textoFralda = "Fralda P + Mimo";
+    else if (n <= 90) textoFralda = "Fralda M + Mimo";
+    else textoFralda = "Fralda G + Mimo";
     
     document.getElementById('tipo-fralda').innerText = textoFralda;
     document.getElementById('num-selecionado').innerText = n.toString().padStart(3, '0');
     
-    // Limpa campos
     document.getElementById('nome').value = '';
     document.getElementById('telefone').value = '';
-    
     document.getElementById('modal').style.display = "flex"; 
 }
 
@@ -124,12 +127,13 @@ window.confirmarReserva = async () => {
     const botao = document.querySelector('#modal .btn-confirmar');
 
     if (!nome || telefone.length < 14) { 
-        alert("Preencha seu nome e WhatsApp (com DDD)!");
+        alert("Preencha seu nome e WhatsApp corretamente!");
         return;
     }
 
     botao.disabled = true;
-    botao.innerText = "Processando...";
+    // Ícone de loading no botão
+    botao.innerHTML = '<span class="material-icons-round animation-spin">sync</span> Aguarde...';
 
     try {
         await setDoc(doc(db, "rifa", String(numeroAtual)), {
@@ -138,15 +142,13 @@ window.confirmarReserva = async () => {
             status: "reservado",
             data: new Date().toISOString()
         });
-        
         abrirModalSucesso(numeroAtual);
-
     } catch (e) {
         console.error(e);
-        alert("Erro ao conectar. Tente novamente.");
+        alert("Erro ao reservar. Tente novamente.");
     } finally {
         botao.disabled = false;
-        botao.innerText = "Confirmar Reserva 💜";
+        botao.innerText = "Confirmar Reserva";
     }
 }
 

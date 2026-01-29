@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Chá Rifa Isis Maitê</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
         :root {
             --cor-roxo: #4B0082;
@@ -12,7 +13,6 @@
         }
         body { background-color: #F3F0FF; font-family: 'Segoe UI', sans-serif; }
         
-        /* Customizando Bootstrap para o tema */
         .btn-primary { background-color: var(--cor-roxo); border-color: var(--cor-roxo); }
         .btn-primary:hover { background-color: #3a0066; border-color: #3a0066; }
         .btn-outline-primary { color: var(--cor-roxo); border-color: var(--cor-roxo); }
@@ -24,13 +24,20 @@
         
         .badge-numero { font-size: 1.5em; font-weight: bold; width: 60px; text-align: center; color: var(--cor-roxo); }
         h2, h3 { color: var(--cor-roxo); }
+
+        /* Classe auxiliar para ícones nos botões do admin */
+        .btn-icon { display: flex; align-items: center; gap: 5px; }
+        .material-icons-round { font-size: 1.2em; vertical-align: middle; }
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="container mt-5" style="max-width: 400px;">
         <div class="card p-4 text-center shadow-sm border-0">
-            <h3 class="mb-4">🔒 Admin Isis Maitê</h3>
+            <h3 class="mb-4">
+                <span class="material-icons-round" style="color: var(--cor-roxo);">lock</span>
+                Admin Isis Maitê
+            </h3>
             <input type="password" id="senha" class="form-control mb-3" placeholder="Senha">
             <button onclick="verificarSenha()" class="btn btn-primary w-100">Acessar</button>
         </div>
@@ -38,8 +45,14 @@
 
     <div id="painel" class="container mt-4" style="display: none;">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Gestão Chá Rifa</h2>
-            <span class="badge bg-dark" id="total-vendidos">Carregando...</span>
+            <h2>
+                <span class="material-icons-round" style="font-size: 1.2em;">dashboard</span>
+                Gestão Chá Rifa
+            </h2>
+            <span class="badge bg-dark d-flex align-items-center gap-2" id="total-vendidos" style="padding: 10px;">
+                <span class="material-icons-round animation-spin" style="font-size: 1em;">sync</span>
+                Carregando...
+            </span>
         </div>
 
         <div class="btn-group mb-4 w-100 shadow-sm">
@@ -57,7 +70,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getFirestore, collection, query, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        // MANTENHA A CONFIGURAÇÃO IGUAL AO SEU PROJETO ATUAL
         const firebaseConfig = {
             apiKey: "AIzaSyACBB_r8sPsXaIy7L9k2CkMd2rwk3wUrYc",
             authDomain: "rifa-7c72f.firebaseapp.com",
@@ -70,9 +82,8 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- SENHA SIMPLES (ALTERE SE DESEJAR) ---
         window.verificarSenha = () => {
-            if(document.getElementById('senha').value === "isis2026") { // Nova senha sugerida
+            if(document.getElementById('senha').value === "isis2026") { 
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('painel').style.display = 'block';
                 iniciarApp();
@@ -90,7 +101,6 @@
                 
                 snapshot.forEach((doc) => {
                     const data = doc.data();
-                    // Filtra apenas números válidos (1 a 120) se houver lixo no banco
                     if(parseInt(doc.id) <= 120 && data.status !== 'livre') {
                         todasReservas.push({ id: doc.id, ...data });
                         if(data.status === 'pago') totalPagos++;
@@ -99,7 +109,10 @@
 
                 todasReservas.sort((a, b) => parseInt(a.id) - parseInt(b.id));
                 
-                document.getElementById('total-vendidos').innerText = `${totalPagos} Pagos / ${todasReservas.length} Reservados`;
+                document.getElementById('total-vendidos').innerHTML = `
+                    <span class="material-icons-round" style="font-size: 1em; color: lightgreen;">check_circle</span>
+                    ${totalPagos} Pagos / ${todasReservas.length} Reservados
+                `;
                 renderizarLista(todasReservas);
             });
         }
@@ -119,6 +132,7 @@
                 const statusTexto = isPago ? 'CONFIRMADO' : 'AGUARDANDO';
                 const zapNumeros = item.telefone.replace(/\D/g, '');
 
+                // Ícones modernos no template literal
                 const html = `
                 <div class="col-md-6 col-lg-4">
                     <div class="card card-numero ${statusClass} p-3">
@@ -126,8 +140,8 @@
                             <div>
                                 <span class="badge-numero">#${item.id.padStart(3, '0')}</span>
                                 <h5 class="mt-2 mb-0 fw-bold">${item.nome}</h5>
-                                <a href="https://wa.me/55${zapNumeros}" target="_blank" class="text-decoration-none text-muted small">
-                                    📱 ${item.telefone}
+                                <a href="https://wa.me/55${zapNumeros}" target="_blank" class="text-decoration-none text-muted small d-flex align-items-center gap-1">
+                                    <span class="material-icons-round" style="font-size: 1em;">smartphone</span> ${item.telefone}
                                 </a>
                                 <div class="mt-1 fw-bold ${isPago ? 'text-success' : 'text-warning'}">
                                     ${statusTexto}
@@ -136,18 +150,18 @@
                             
                             <div class="d-flex flex-column gap-2">
                                 ${!isPago ? `
-                                    <button onclick="mudarStatus('${item.id}', 'pago')" class="btn btn-sm btn-success">
-                                        ✅ Baixa
+                                    <button onclick="mudarStatus('${item.id}', 'pago')" class="btn btn-sm btn-success btn-icon">
+                                        <span class="material-icons-round">check_circle</span> Baixa
                                     </button>
-                                    <button onclick="liberarNumero('${item.id}')" class="btn btn-sm btn-outline-danger">
-                                        ♻️ Liberar
+                                    <button onclick="liberarNumero('${item.id}')" class="btn btn-sm btn-outline-danger btn-icon">
+                                        <span class="material-icons-round">delete_outline</span> Liberar
                                     </button>
                                 ` : `
-                                    <button onclick="mudarStatus('${item.id}', 'reservado')" class="btn btn-sm btn-outline-secondary">
-                                        ↩️ Voltar
+                                    <button onclick="mudarStatus('${item.id}', 'reservado')" class="btn btn-sm btn-outline-secondary btn-icon">
+                                        <span class="material-icons-round">undo</span> Voltar
                                     </button>
-                                    <button onclick="liberarNumero('${item.id}')" class="btn btn-sm btn-outline-danger">
-                                        🗑️ Excluir
+                                    <button onclick="liberarNumero('${item.id}')" class="btn btn-sm btn-outline-danger btn-icon">
+                                        <span class="material-icons-round">delete</span> Excluir
                                     </button>
                                 `}
                             </div>
